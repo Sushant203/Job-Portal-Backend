@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import { User } from "./user/entity/users.entity";
 import { SkillsModule } from './skills/skills.module';
 import { Skill } from "./skills/entities/skill.entity";
+import { ResumeModule } from './resume/resume.module';
+import { Resume } from "./resume/entities/resume.entity";
 @Module({
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot({
     type: "postgres",
@@ -18,8 +20,8 @@ import { Skill } from "./skills/entities/skill.entity";
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: true,
-    entities: [User, Skill]
-  }), UserModule, SkillsModule],
+    entities: [User, Skill, Resume]
+  }), UserModule, SkillsModule, ResumeModule],
   controllers: [],
   providers: [],
 })
