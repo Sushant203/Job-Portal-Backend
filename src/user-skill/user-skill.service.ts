@@ -52,8 +52,30 @@ export class UserSkillService {
     return result;
   }
 
-  update(id: number, updateUserSkillDto: UpdateUserSkillDto) {
-    return `This action updates a #${id} userSkill`;
+  async update(user_skill_id: number, updateUserSkillDto: UpdateUserSkillDto): Promise<UserSkill> {
+    //check user avaialbility
+    const userAvailabe = await this.userRepository.findOne({ where: { id: updateUserSkillDto.user_id } });
+    if (!userAvailabe) {
+      throw new NotFoundException(`user id not found`);
+    }
+    //check job avaialbility
+    const skills = await this.skillRepository.findOne({ where: { id: updateUserSkillDto.skill_id } });
+    if (!skills) {
+      throw new NotFoundException(`skills not found`);
+
+    }
+    //check application avaialbility
+    const userSkillAvailable = await this.userSkillRepository.findOne({ where: { user_skill_id } });
+    if (!userSkillAvailable) {
+      throw new NotFoundException(`application not found`);
+    }
+
+    const updatedUserSkill = this.userSkillRepository.create({
+      ...updateUserSkillDto,
+      user: userAvailabe,
+      skill: skills,
+    })
+    return this.userSkillRepository.save(updatedUserSkill);
   }
 
   remove(id: number) {
