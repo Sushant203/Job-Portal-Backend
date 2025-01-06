@@ -40,12 +40,16 @@ export class UserSkillService {
     return this.userSkillRepository.save(userSkills);
   }
 
-  findAll() {
-    return `This action returns all userSkill`;
+  async findAll(): Promise<UserSkill[]> {
+    return this.userSkillRepository.find({ relations: ['user', 'skill'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} userSkill`;
+  async findOne(user_skill_id: number) {
+    const result = this.userSkillRepository.findOne({ where: { user_skill_id } });
+    if (!result) {
+      throw new NotFoundException(`application ${user_skill_id} not found`);
+    }
+    return result;
   }
 
   update(id: number, updateUserSkillDto: UpdateUserSkillDto) {
