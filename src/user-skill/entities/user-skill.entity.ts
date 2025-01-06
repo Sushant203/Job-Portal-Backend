@@ -1,7 +1,8 @@
 import { Skill } from "src/skills/entities/skill.entity";
 import { User } from "src/user/entity/users.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
+@Entity()
 export class UserSkill {
     @PrimaryGeneratedColumn()
     user_skill_id: number
@@ -15,7 +16,7 @@ export class UserSkill {
     @ManyToOne(() => User, (user) => user.user_skill)
     user: User
 
-    //relation with skill table
+    // relation with skill table
     @ManyToOne(() => Skill, (skill) => skill.user_skill)
     skill: Skill
 }

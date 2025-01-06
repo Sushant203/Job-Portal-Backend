@@ -6,8 +6,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Resume } from 'src/resume/entities/resume.entity';
 import { Job } from 'src/jobs/entities/job.entity';
 import { Application } from 'src/applications/entities/application.entity';
+import { UserSkill } from 'src/user-skill/entities/user-skill.entity';
 @Module({
-    imports: [TypeOrmModule.forFeature([User, Resume, Job, Application])],
+    imports: [TypeOrmModule.forFeature([User, Resume, Job, Application, UserSkill])],
     controllers: [UserController],
     providers: [UserService],
 })
