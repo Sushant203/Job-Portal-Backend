@@ -34,7 +34,7 @@ export class ApplicationsService {
 
     const applicationData = await this.applicationRepository.create({
       user: users,
-      ...Job,
+      job: jobAvaiable,
       ...createApplicationDto,
     })
     return this.applicationRepository.save(applicationData);
@@ -47,7 +47,7 @@ export class ApplicationsService {
 
   async findOne(application_id: number): Promise<Application> {
     const result = this.applicationRepository.findOne({ where: { application_id } })
-    if (result) {
+    if (!result) {
       throw new NotFoundException(`application ${application_id} not found`);
     }
     return result;
@@ -79,7 +79,11 @@ export class ApplicationsService {
     return this.applicationRepository.save(updatedApplication);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} application`;
+  async remove(application_id: number): Promise<void> {
+    const applicationAvailable = await this.applicationRepository.findOne({ where: { application_id } });
+    if (!applicationAvailable) {
+      throw new NotFoundException(`application not found`);
+    }
+    await this.applicationRepository.remove(applicationAvailable);
   }
 }
