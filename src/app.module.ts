@@ -14,6 +14,7 @@ import { Resume } from "./resume/entities/resume.entity";
 import { JobsModule } from './jobs/jobs.module';
 import { Job } from "./jobs/entities/job.entity";
 import { ApplicationsModule } from './applications/applications.module';
+import { Application } from "./applications/entities/application.entity";
 @Module({
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot({
     type: "postgres",
@@ -23,7 +24,7 @@ import { ApplicationsModule } from './applications/applications.module';
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     synchronize: true,
-    entities: [User, Skill, Resume, Job]
+    entities: [User, Skill, Resume, Job, Application]
   }), UserModule, SkillsModule, ResumeModule, JobsModule, ApplicationsModule],
   controllers: [],
   providers: [],

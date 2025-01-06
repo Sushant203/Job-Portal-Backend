@@ -1,8 +1,9 @@
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { applicationStatus } from "../dto/applicationStatus";
 import { User } from "src/user/entity/users.entity";
 import { Job } from "src/jobs/entities/job.entity";
 
+@Entity()
 export class Application {
     @PrimaryGeneratedColumn()
     application_id: number
