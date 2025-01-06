@@ -53,8 +53,30 @@ export class ApplicationsService {
     return result;
   }
 
-  update(id: number, updateApplicationDto: UpdateApplicationDto) {
-    return `This action updates a #${id} application`;
+  async update(application_id: number, updateApplicationDto: UpdateApplicationDto): Promise<Application> {
+    //check user avaialbility
+    const userAvailabe = await this.userRepository.findOne({ where: { id: updateApplicationDto.user_id } });
+    if (!userAvailabe) {
+      throw new NotFoundException(`user id not found`);
+    }
+    //check job avaialbility
+    const jobs = await this.jobRepository.findOne({ where: { job_id: updateApplicationDto.job_id } });
+    if (!jobs) {
+      throw new NotFoundException(`job not found`);
+
+    }
+    //check application avaialbility
+    const applicationAvailable = await this.applicationRepository.findOne({ where: { application_id } });
+    if (!applicationAvailable) {
+      throw new NotFoundException(`application not found`);
+    }
+
+    const updatedApplication = this.applicationRepository.create({
+      ...updateApplicationDto,
+      user: userAvailabe,
+      job: jobs,
+    })
+    return this.applicationRepository.save(updatedApplication);
   }
 
   remove(id: number) {
