@@ -1,3 +1,5 @@
+import { application } from 'express';
+import { Application } from 'src/applications/entities/application.entity';
 import { Job } from 'src/jobs/entities/job.entity';
 import { Resume } from 'src/resume/entities/resume.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
@@ -34,9 +36,14 @@ export class User {
     @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
     updated_at: Date;
 
+    //realtion with resume table
     @OneToMany(() => Resume, (resume) => resume.user)
     resume: Resume
     //relation for jobs
     @OneToMany(() => Job, (job) => job.user)
     job: Job
+
+    //realtion with application table
+    @OneToMany(() => Application, (application) => application.user_id)
+    application: Application
 }

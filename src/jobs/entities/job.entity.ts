@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { employmentType } from "../dto/employmentEnum";
 import { statusEnum } from "../dto/statusEnum";
 import { User } from "src/user/entity/users.entity";
+import { Application } from "src/applications/entities/application.entity";
+import { application } from "express";
 @Entity()
 export class Job {
     @PrimaryGeneratedColumn()
@@ -38,4 +40,7 @@ export class Job {
     @ManyToOne(() => User, (user) => user.job)
     user: User
 
+    //realtion with application table
+    @OneToMany(() => Application, (application) => application.job_id)
+    application: Application
 }
