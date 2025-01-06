@@ -2,6 +2,7 @@ import { application } from 'express';
 import { Application } from 'src/applications/entities/application.entity';
 import { Job } from 'src/jobs/entities/job.entity';
 import { Resume } from 'src/resume/entities/resume.entity';
+import { UserSkill } from 'src/user-skill/entities/user-skill.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 enum roles {
@@ -46,4 +47,8 @@ export class User {
     //realtion with application table
     @OneToMany(() => Application, (application) => application.user_id)
     application: Application
+
+    //relation with user skill table
+    @OneToMany(() => UserSkill, (user_skill) => user_skill.user_id)
+    user_skill: UserSkill
 }
