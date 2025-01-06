@@ -1,3 +1,4 @@
+import { Job } from 'src/jobs/entities/job.entity';
 import { Resume } from 'src/resume/entities/resume.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
@@ -35,4 +36,7 @@ export class User {
 
     @OneToMany(() => Resume, (resume) => resume.user)
     resume: Resume
+    //relation for jobs
+    @OneToMany(() => Job, (job) => job.user)
+    job: Job
 }
