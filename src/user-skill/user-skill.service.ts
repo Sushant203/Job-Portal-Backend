@@ -78,7 +78,11 @@ export class UserSkillService {
     return this.userSkillRepository.save(updatedUserSkill);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} userSkill`;
+  async remove(user_skill_id: number): Promise<void> {
+    const userSkillAvailable = await this.userSkillRepository.findOne({ where: { user_skill_id } });
+    if (!userSkillAvailable) {
+      throw new NotFoundException(`user skill not found`);
+    }
+    await this.userSkillRepository.remove(userSkillAvailable);
   }
 }
