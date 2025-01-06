@@ -40,12 +40,17 @@ export class ApplicationsService {
     return this.applicationRepository.save(applicationData);
   }
 
-  findAll() {
-    return `This action returns all applications`;
+
+  async findAll(): Promise<Application[]> {
+    return this.applicationRepository.find({ relations: ['user', 'job'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} application`;
+  async findOne(application_id: number): Promise<Application> {
+    const result = this.applicationRepository.findOne({ where: { application_id } })
+    if (result) {
+      throw new NotFoundException(`application ${application_id} not found`);
+    }
+    return result;
   }
 
   update(id: number, updateApplicationDto: UpdateApplicationDto) {
