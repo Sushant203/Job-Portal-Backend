@@ -1,11 +1,42 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateJobSkillDto } from './dto/create-job-skill.dto';
 import { UpdateJobSkillDto } from './dto/update-job-skill.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JobSkill } from './entities/job-skill.entity';
+import { Repository } from 'typeorm';
+import { Job } from 'src/jobs/entities/job.entity';
+import { Skill } from 'src/skills/entities/skill.entity';
 
 @Injectable()
 export class JobSkillService {
-  create(createJobSkillDto: CreateJobSkillDto) {
-    return 'This action adds a new jobSkill';
+  constructor(
+    @InjectRepository(JobSkill)
+    private jobSkillRepository: Repository<JobSkill>,
+    @InjectRepository(Job)
+    private readonly jobRepository: Repository<Job>,
+    @InjectRepository(Skill)
+    private readonly skillRepository: Repository<Skill>
+  ) { }
+
+
+  async create(createJobSkillDto: CreateJobSkillDto): Promise<JobSkill> {
+    const jobs = await this.jobRepository.findOne({ where: { job_id: createJobSkillDto.job_id } });
+    if (!jobs) {
+      throw new NotFoundException('job not found');
+    }
+
+    const skills = await this.skillRepository.findOne({ where: { id: createJobSkillDto.skill_id } });
+    if (!skills) {
+      throw new NotFoundException('skills not found');
+    }
+
+    const jobSkillData = this.jobSkillRepository.create({
+      ...createJobSkillDto,
+      job: jobs,
+      skill: skills
+    })
+
+    return this.jobSkillRepository.save(jobSkillData);
   }
 
   findAll() {
