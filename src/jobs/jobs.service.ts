@@ -27,7 +27,7 @@ export class JobsService {
   }
 
   async findAll(): Promise<Job[]> {
-    return this.jobRepository.find({ relations: ['User'] })
+    return this.jobRepository.find({ relations: ['user'] })
   }
 
   async findOne(job_id: number): Promise<Job> {
