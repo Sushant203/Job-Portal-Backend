@@ -51,11 +51,39 @@ export class JobSkillService {
     return avaialbeJobSkill;
   }
 
-  update(job_skill_id: number, updateJobSkillDto: UpdateJobSkillDto) {
-    return `This action updates a #${id} jobSkill`;
+  //update function
+
+  async update(job_skill_id: number, updateJobSkillDto: UpdateJobSkillDto): Promise<JobSkill> {
+    const jobsAvailable = await this.jobRepository.findOne({ where: { job_id: updateJobSkillDto.job_id } });
+    if (!jobsAvailable) {
+      throw new NotFoundException('job not found');
+    }
+
+    const skillsAvailable = await this.skillRepository.findOne({ where: { id: updateJobSkillDto.skill_id } });
+    if (!skillsAvailable) {
+      throw new NotFoundException('skills not found');
+    }
+
+    const jobSkillAvailable = await this.jobSkillRepository.findOne({ where: { job_skill_id } });
+    if (!jobSkillAvailable) {
+      throw new NotFoundException('skills not found');
+    }
+
+    const updatedJobSkillData = this.jobSkillRepository.create({
+      job: jobsAvailable,
+      skill: skillsAvailable,
+      ...updateJobSkillDto
+    })
+
+    return this.jobSkillRepository.save(updatedJobSkillData);
   }
 
-  remove(job_skill_id: number) {
-    return `This action removes a #${id} jobSkill`;
+  //delete function
+  async remove(job_skill_id: number): Promise<void> {
+    const jobSkillAvailable = await this.jobSkillRepository.findOne({ where: { job_skill_id } });
+    if (!jobSkillAvailable) {
+      throw new NotFoundException('skills not found');
+    }
+    await this.jobSkillRepository.remove(jobSkillAvailable);
   }
 }
