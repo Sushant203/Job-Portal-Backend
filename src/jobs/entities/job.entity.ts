@@ -4,6 +4,7 @@ import { statusEnum } from "../dto/statusEnum";
 import { User } from "src/user/entity/users.entity";
 import { Application } from "src/applications/entities/application.entity";
 import { application } from "express";
+import { JobSkill } from "src/job-skill/entities/job-skill.entity";
 @Entity()
 export class Job {
     @PrimaryGeneratedColumn()
@@ -43,4 +44,8 @@ export class Job {
     //realtion with application table
     @OneToMany(() => Application, (application) => application.job_id)
     application: Application
+
+    //relation with job_skill table
+    @OneToMany(() => JobSkill, (job_skill) => job_skill.job_id)
+    job_skill: JobSkill
 }
