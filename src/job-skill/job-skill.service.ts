@@ -39,19 +39,23 @@ export class JobSkillService {
     return this.jobSkillRepository.save(jobSkillData);
   }
 
-  findAll() {
-    return `This action returns all jobSkill`;
+  async findAll(): Promise<JobSkill[]> {
+    return this.jobSkillRepository.find({ relations: ['job', 'skill'] })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} jobSkill`;
+  async findOne(job_skill_id: number): Promise<JobSkill> {
+    const avaialbeJobSkill = this.jobSkillRepository.findOne({ where: { job_skill_id } });
+    if (!avaialbeJobSkill) {
+      throw new NotFoundException('job skill not found');
+    }
+    return avaialbeJobSkill;
   }
 
-  update(id: number, updateJobSkillDto: UpdateJobSkillDto) {
+  update(job_skill_id: number, updateJobSkillDto: UpdateJobSkillDto) {
     return `This action updates a #${id} jobSkill`;
   }
 
-  remove(id: number) {
+  remove(job_skill_id: number) {
     return `This action removes a #${id} jobSkill`;
   }
 }
